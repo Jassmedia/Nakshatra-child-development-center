@@ -1,0 +1,12 @@
+@import "tailwindcss";
+
+/* Design tokens. Colours are applied with Tailwind utility classes (see layout.tsx);
+   unlayered `body { background: ... }` rules would override those utilities, so keep them out. */
+@theme inline {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+html {
+  color-scheme: light dark;
+}

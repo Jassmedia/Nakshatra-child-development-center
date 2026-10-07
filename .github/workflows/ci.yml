@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  push:
+    branches: [main, "claude/**"]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  app:
+    name: Lint, typecheck, unit tests, build
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      # No secrets needed: env vars are validated lazily at runtime, not at build time.
+      - run: npm run build
+
+  database:
+    name: Database migrations + RLS security tests
+    runs-on: ubuntu-24.04
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DB_URL: postgresql://postgres:postgres@localhost:5432/postgres
+    steps:
+      - uses: actions/checkout@v4
+      - name: Apply Supabase stub and migrations
+        run: |
+          psql "$DB_URL" -X -q -v ON_ERROR_STOP=1 -f tests/db/setup/supabase_stub.sql
+          for m in supabase/migrations/*.sql; do
+            echo "applying $m"
+            psql "$DB_URL" -X -q -v ON_ERROR_STOP=1 -f "$m"
+          done
+      - name: Run RLS / security tests
+        run: TEST_DATABASE_URL="$DB_URL" bash scripts/db-test.sh

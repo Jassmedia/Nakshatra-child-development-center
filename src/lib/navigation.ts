@@ -10,6 +10,7 @@ export const NAV: Record<AppRole, NavItem[]> = {
     { href: "/admin/activities", label: "Daily activities" },
     { href: "/admin/attendance", label: "Attendance" },
     { href: "/admin/progress", label: "Progress" },
+    { href: "/admin/home-tasks", label: "Home tasks" },
     { href: "/admin/parents", label: "Parents" },
     { href: "/admin/staff", label: "Staff" },
     { href: "/admin/users", label: "User accounts" },
@@ -18,6 +19,7 @@ export const NAV: Record<AppRole, NavItem[]> = {
     { href: "/staff", label: "Today" },
     { href: "/staff/students", label: "My students" },
     { href: "/staff/attendance", label: "Attendance" },
+    { href: "/staff/home-tasks", label: "Home tasks" },
   ],
   parent: [{ href: "/parent", label: "Home" }],
 };

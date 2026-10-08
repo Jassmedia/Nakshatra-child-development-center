@@ -7,6 +7,7 @@ import { IDLE, type ActionState } from "@/lib/actions";
 import { cn } from "@/lib/utils";
 
 import { buttonClass } from "./button";
+import { toast } from "./toaster";
 
 const FormStateContext = createContext<ActionState>(IDLE);
 /** Unique per form, so several forms on one page never share input ids. */
@@ -29,13 +30,23 @@ export function ActionForm({
   className,
   resetOnSuccess = false,
   hideSuccessMessage = false,
+  inlineSuccess = false,
   ...props
 }: Omit<ComponentProps<"form">, "action"> & {
   action: ServerAction;
   resetOnSuccess?: boolean;
+  /** Don't announce success at all (e.g. a posted comment that is visible anyway). */
   hideSuccessMessage?: boolean;
+  /** Keep the success message inside the form instead of a toast (e.g. "check your email"). */
+  inlineSuccess?: boolean;
 }) {
-  const [state, formAction] = useActionState(action, IDLE);
+  // Success is announced as a toast from the action itself, so it still shows
+  // when the page refresh removes this form (e.g. a reviewed task leaving a queue).
+  const [state, formAction] = useActionState(async (prev: ActionState, formData: FormData) => {
+    const result = await action(prev, formData);
+    if (result.status === "success" && result.message && !hideSuccessMessage && !inlineSuccess) toast(result.message);
+    return result;
+  }, IDLE);
   const formRef = useRef<HTMLFormElement>(null);
   const formId = useId().replace(/:/g, "");
 
@@ -52,7 +63,7 @@ export function ActionForm({
             {state.message}
           </p>
         ) : null}
-        {state.status === "success" && state.message && !hideSuccessMessage ? (
+        {state.status === "success" && state.message && inlineSuccess ? (
           <p role="status" className="rounded-lg border border-sage-600/40 bg-sage-50 px-3 py-2 text-sm text-sage-800">
             {state.message}
           </p>

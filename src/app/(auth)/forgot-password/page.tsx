@@ -13,7 +13,7 @@ export default function ForgotPasswordPage() {
       <p className="mt-1 text-[15px] text-ink-400">
         Enter your email. We&apos;ll send a link to choose a new password.
       </p>
-      <ActionForm action={requestPasswordReset} className="mt-6">
+      <ActionForm action={requestPasswordReset} className="mt-6" inlineSuccess>
         <Field label="Email" name="email">
           <Input name="email" type="email" autoComplete="email" inputMode="email" required />
         </Field>

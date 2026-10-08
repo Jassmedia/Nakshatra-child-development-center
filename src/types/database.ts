@@ -77,6 +77,82 @@ isOneToOne: false
                   Relationships: [
                     
                   ]
+                },"home_assignment_comments": {
+                  Row: {
+                    "assignment_id": string,"author_id": string | null,"body": string,"created_at": string,"id": string,"student_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "assignment_id": string,"author_id"?: string | null,"body": string,"created_at"?: string,"id"?: string,"student_id": string
+                  }
+                  Update: {
+                    "assignment_id"?: string,"author_id"?: string | null,"body"?: string,"created_at"?: string,"id"?: string,"student_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "home_assignment_comments_assignment_id_fkey"
+      columns: ["assignment_id"]
+isOneToOne: false
+      referencedRelation: "home_assignments"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "home_assignment_comments_author_id_fkey"
+      columns: ["author_id"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "home_assignment_comments_student_id_fkey"
+      columns: ["student_id"]
+isOneToOne: false
+      referencedRelation: "students"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"home_assignments": {
+                  Row: {
+                    "assigned_on": string,"completed_at": string | null,"completed_by": string | null,"created_at": string,"created_by": string | null,"due_date": string | null,"id": string,"instructions": string | null,"reviewed_at": string | null,"reviewed_by": string | null,"staff_feedback": string | null,"status": string,"student_id": string,"title": string,"updated_at": string,"updated_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "assigned_on"?: string,"completed_at"?: string | null,"completed_by"?: string | null,"created_at"?: string,"created_by"?: string | null,"due_date"?: string | null,"id"?: string,"instructions"?: string | null,"reviewed_at"?: string | null,"reviewed_by"?: string | null,"staff_feedback"?: string | null,"status"?: string,"student_id": string,"title": string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "assigned_on"?: string,"completed_at"?: string | null,"completed_by"?: string | null,"created_at"?: string,"created_by"?: string | null,"due_date"?: string | null,"id"?: string,"instructions"?: string | null,"reviewed_at"?: string | null,"reviewed_by"?: string | null,"staff_feedback"?: string | null,"status"?: string,"student_id"?: string,"title"?: string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "home_assignments_completed_by_fkey"
+      columns: ["completed_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "home_assignments_created_by_fkey"
+      columns: ["created_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "home_assignments_reviewed_by_fkey"
+      columns: ["reviewed_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "home_assignments_student_id_fkey"
+      columns: ["student_id"]
+isOneToOne: false
+      referencedRelation: "students"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "home_assignments_updated_by_fkey"
+      columns: ["updated_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    }
+                  ]
                 },"parents": {
                   Row: {
                     "address": string | null,"alternate_phone": string | null,"created_at": string,"created_by": string | null,"email": string | null,"full_name": string,"id": string,"phone": string | null,"profile_id": string | null,"updated_at": string
@@ -291,7 +367,10 @@ isOneToOne: false
             [_ in never]: never
           }
           Functions: {
-            "get_staff_names":
+            "complete_home_assignment":
+{ Args: { "p_assignment_id": string,"p_comment"?: string }; Returns: undefined
+                           },
+"get_staff_names":
 { Args: Record<PropertyKey, never>; Returns: {
               "designation": string,"full_name": string,"id": string
             }[]

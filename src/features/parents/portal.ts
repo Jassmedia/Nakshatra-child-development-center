@@ -17,7 +17,7 @@ export async function myChildren() {
 export async function childSnapshot(studentId: string) {
   const supabase = await createClient();
   const today = todayIST();
-  const [attendance, activities, progress, upcoming] = await Promise.all([
+  const [attendance, activities, progress, upcoming, tasks] = await Promise.all([
     supabase.from("attendance").select("status, check_in").eq("student_id", studentId).eq("attendance_date", today).maybeSingle(),
     supabase.from("student_activities").select("status").eq("student_id", studentId).eq("scheduled_date", today).neq("status", "cancelled"),
     supabase
@@ -37,6 +37,7 @@ export async function childSnapshot(studentId: string) {
       .order("scheduled_date")
       .limit(1)
       .maybeSingle(),
+    supabase.from("home_assignments").select("due_date").eq("student_id", studentId).eq("status", "pending"),
   ]);
   const acts = activities.data ?? [];
   return {
@@ -45,5 +46,7 @@ export async function childSnapshot(studentId: string) {
     activitiesDone: acts.filter((a) => a.status === "completed" || a.status === "partially_completed").length,
     latestProgress: progress.data,
     nextActivity: upcoming.data,
+    tasksPending: tasks.data?.length ?? 0,
+    tasksOverdue: (tasks.data ?? []).filter((t) => t.due_date !== null && t.due_date < today).length,
   };
 }

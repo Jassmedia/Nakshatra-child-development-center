@@ -50,6 +50,18 @@ async function ChildCard({ child }: { child: Awaited<ReturnType<typeof myChildre
           </dd>
         </div>
         <div className="sm:col-span-2">
+          <dt className="text-xs font-bold text-ink-400">Home tasks</dt>
+          <dd className="mt-1 text-[15px]">
+            {s.tasksPending === 0 ? (
+              <span className="text-ink-400">Nothing to do right now</span>
+            ) : (
+              <Link href={`${base}/home-tasks`} className="font-bold text-ink-600 hover:underline">
+                {s.tasksPending} to do{s.tasksOverdue ? `, ${s.tasksOverdue} overdue` : ""}
+              </Link>
+            )}
+          </dd>
+        </div>
+        <div className="sm:col-span-2">
           <dt className="text-xs font-bold text-ink-400">Latest progress note</dt>
           <dd className="mt-1">
             {s.latestProgress ? (

@@ -68,3 +68,10 @@ export const LEVEL_LABEL: Record<number, string> = {
   4: "Mostly independent",
   5: "Independent",
 };
+
+export const ASSIGNMENT_STATUSES = ["pending", "completed", "reviewed"] as const;
+export const ASSIGNMENT_STATUS_LABEL: Record<string, string> = {
+  pending: "Pending",
+  completed: "Completed",
+  reviewed: "Reviewed",
+};

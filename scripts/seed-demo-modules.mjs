@@ -120,4 +120,25 @@ export async function seed(db, ids) {
     await insert(db, "progress_updates", rows);
     console.log(`demo progress: ${rows.length} updates`);
   }
+
+  // --- Stage 6: home assignments ------------------------------------------------------
+  if (await isEmpty(db, "home_assignments")) {
+    const tasks = await insert(db, "home_assignments", [
+      { student_id: S.aarav, title: "Name 5 fruits at breakfast", instructions: "Show one fruit at a time and wait 5 seconds before helping.", assigned_on: day(-6), due_date: day(1), created_by: ids.speech, updated_by: ids.speech },
+      { student_id: S.aarav, title: "Bubble blowing, 5 minutes", instructions: "Helps with breath control for speech.", assigned_on: day(-12), due_date: day(-5), created_by: ids.speech, updated_by: ids.speech },
+      { student_id: S.diya, title: "Peg board practice", instructions: "10 pegs, pincer grasp only.", assigned_on: day(-9), due_date: day(-2), created_by: ids.ot, updated_by: ids.ot },
+      { student_id: S.zoya, title: "Take turns in a board game", instructions: "Use the 'my turn / your turn' card.", assigned_on: day(-4), due_date: day(3), created_by: ids.speech, updated_by: ids.speech },
+      { student_id: S.kabir, title: "Climb stairs holding the rail", instructions: "Twice a day, supervise closely.", assigned_on: day(-10), due_date: day(-3), created_by: ids.ot, updated_by: ids.ot },
+    ]);
+    // One completed and one reviewed, with a short conversation.
+    await db.from("home_assignments").update({ status: "completed", completed_at: new Date().toISOString(), completed_by: ids.parentA }).eq("id", tasks[1].id);
+    await db.from("home_assignments").update({ status: "completed", completed_at: new Date().toISOString(), completed_by: ids.parentA }).eq("id", tasks[2].id);
+    await db.from("home_assignments").update({ status: "reviewed", staff_feedback: "Lovely progress, keep it up!", reviewed_by: ids.ot }).eq("id", tasks[2].id);
+    await insert(db, "home_assignment_comments", [
+      { assignment_id: tasks[1].id, student_id: S.aarav, author_id: ids.parentA, body: "He enjoyed it and lasted 4 minutes." },
+      { assignment_id: tasks[2].id, student_id: S.diya, author_id: ids.parentA, body: "Done every day this week." },
+      { assignment_id: tasks[2].id, student_id: S.diya, author_id: ids.ot, body: "Wonderful, thank you!" },
+    ]);
+    console.log(`demo home assignments: ${tasks.length}`);
+  }
 }

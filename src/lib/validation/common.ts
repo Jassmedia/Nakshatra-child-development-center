@@ -40,3 +40,35 @@ export function optionalText(max: number) {
 
 /** A calendar date in YYYY-MM-DD form (as sent by <input type="date">). */
 export const isoDateSchema = z.iso.date();
+
+/** Optional date from a form: "" becomes null. */
+export const optionalDate = z
+  .union([z.literal(""), isoDateSchema])
+  .optional()
+  .transform((v) => (v ? v : null));
+
+/** Optional choice from a <select>: "" becomes null. */
+export function optionalEnum<const T extends readonly [string, ...string[]]>(values: T) {
+  return z
+    .union([z.literal(""), z.enum(values)])
+    .optional()
+    .transform((v) => (v ? (v as T[number]) : null));
+}
+
+/** Checkbox: present ("on") => true, absent => false. */
+export const checkbox = z
+  .union([z.literal("on"), z.literal("true"), z.literal("")])
+  .optional()
+  .transform((v) => v === "on" || v === "true");
+
+/** Optional phone number from a form. */
+export const optionalPhone = z
+  .union([z.literal(""), phoneSchema])
+  .optional()
+  .transform((v) => (v ? v : null));
+
+/** Optional email from a form. */
+export const optionalEmail = z
+  .union([z.literal(""), emailSchema])
+  .optional()
+  .transform((v) => (v ? v : null));

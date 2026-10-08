@@ -1,12 +1,7 @@
 import { z } from "zod";
 
 import { passwordSchema } from "@/features/auth/schemas";
-import { emailSchema, optionalText, phoneSchema, requiredText, uuidSchema } from "@/lib/validation/common";
-
-export const optionalPhone = z
-  .union([z.literal(""), phoneSchema])
-  .optional()
-  .transform((v) => (v ? v : null));
+import { emailSchema, optionalPhone, optionalText, requiredText, uuidSchema } from "@/lib/validation/common";
 
 export const createUserSchema = z
   .object({

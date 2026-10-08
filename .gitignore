@@ -51,3 +51,4 @@ supabase/.branches
 !.vscode/extensions.json
 /test-results/
 /playwright-report/
+/.local-stack/

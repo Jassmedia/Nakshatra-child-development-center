@@ -17,8 +17,10 @@ import type { Database } from "@/types/database";
  * (that would share one user's data with other users).
  */
 export async function createClient() {
-  const env = getPublicEnv();
+  // Read the request cookies FIRST: this marks the page as per-request (never prerendered
+  // at build time), so builds work without env vars and no user data is ever baked in.
   const cookieStore = await cookies();
+  const env = getPublicEnv();
 
   return createServerClient<Database>(
     env.NEXT_PUBLIC_SUPABASE_URL,

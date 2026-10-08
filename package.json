@@ -18,7 +18,10 @@
     "db:new-migration": "supabase migration new",
     "db:types": "supabase gen types --lang typescript --local --schema public > src/types/database.ts",
     "test:e2e": "playwright test",
-    "seed:demo": "node --env-file=.env.local scripts/seed-demo.mjs"
+    "seed:demo": "node --env-file=.env.local scripts/seed-demo.mjs",
+    "stack:start": "bash scripts/local-stack/start.sh",
+    "stack:stop": "bash scripts/local-stack/stop.sh",
+    "create-admin": "node scripts/create-admin.mjs"
   },
   "dependencies": {
     "@fontsource/atkinson-hyperlegible": "^5.3.0",

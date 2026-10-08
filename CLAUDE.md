@@ -7,7 +7,7 @@ Read `docs/PROJECT_DOCUMENTATION.md` before changing anything. The official requ
 
 ## Development rules
 
-1. Build only what the current step asks for. Do not implement later steps early.
+1. Change only what the task asks for; keep modules separate.
 2. Do not change requirements without explaining why.
 3. Keep it simple: one developer must be able to maintain it.
 4. Never expose sensitive data; never hardcode keys, secrets or passwords.
@@ -29,4 +29,7 @@ Read `docs/PROJECT_DOCUMENTATION.md` before changing anything. The official requ
 
 ## Commands
 
-`npm run check` (lint + typecheck + unit + DB tests) · `npm run build` · `npm run test:db`
+`npm run check` (lint + typecheck + unit + DB tests) · `npm run build` · `npm run test:db` · `npm run test:e2e` (needs `npm run stack:start` + `npm run seed:demo` + build)
+
+Server Actions: `requireRole(...)` must be the FIRST statement (a unit test enforces it).
+Totals/reports over many rows: use `fetchAll()` (Supabase returns max 1000 rows per request).

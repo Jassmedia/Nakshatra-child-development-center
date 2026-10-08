@@ -1,12 +1,64 @@
 @import "tailwindcss";
+@import "@fontsource/atkinson-hyperlegible/400.css";
+@import "@fontsource/atkinson-hyperlegible/700.css";
 
-/* Design tokens. Colours are applied with Tailwind utility classes (see layout.tsx);
-   unlayered `body { background: ... }` rules would override those utilities, so keep them out. */
-@theme inline {
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/*
+ * Design tokens — Nakshatra CDC
+ *   ink    night indigo: text, sidebar, primary buttons
+ *   paper  cool page background
+ *   star   saffron gold: brand mark + active navigation ONLY
+ *   sage   done / present / paid
+ *   rose   overdue / absent / errors
+ *   amber  pending / attention
+ */
+@theme {
+  --font-sans: "Atkinson Hyperlegible", ui-sans-serif, system-ui, "Segoe UI", Roboto, sans-serif;
+
+  --color-ink-50: #eef1f8;
+  --color-ink-100: #dde2ee;
+  --color-ink-200: #bcc5dc;
+  --color-ink-300: #8e9bbd;
+  --color-ink-400: #5f6f99;
+  --color-ink-500: #3d4f82;
+  --color-ink-600: #2b3f7a;
+  --color-ink-700: #24345f;
+  --color-ink-800: #1e2a4a;
+  --color-ink-900: #151d35;
+
+  --color-paper: #f7f8fc;
+  --color-line: #dde2ee;
+
+  --color-star-300: #f3d38a;
+  --color-star-500: #e8b23a;
+  --color-star-700: #a87812;
+
+  --color-sage-50: #ebf5f2;
+  --color-sage-600: #3f8f7a;
+  --color-sage-800: #2a5f51;
+
+  --color-rose-50: #fbedef;
+  --color-rose-600: #c2475b;
+  --color-rose-800: #8a2c3c;
+
+  --color-amber-50: #fdf5e4;
+  --color-amber-700: #9a6a0c;
 }
 
 html {
-  color-scheme: light dark;
+  color-scheme: light;
+}
+
+/* Visible keyboard focus everywhere. */
+:focus-visible {
+  outline: 2px solid var(--color-ink-600);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
 }

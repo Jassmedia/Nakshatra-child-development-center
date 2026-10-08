@@ -9,8 +9,11 @@ import type { Database } from "@/types/database";
  *
  * This is NOT authorization. It only keeps the login alive. Real access control
  * happens in the database (RLS) and in server-side checks (src/lib/auth/session.ts).
- * Step 2 adds optimistic redirects (e.g. unauthenticated -> /login) here.
+ * It also does an OPTIMISTIC redirect: visitors without a valid session who open a
+ * protected area are sent to /login. The real checks still run on the server.
  */
+const PROTECTED_PREFIXES = ["/admin", "/staff", "/parent", "/account", "/notifications"];
+
 export async function updateSession(request: NextRequest) {
   const env = getPublicEnv();
   let response = NextResponse.next({ request });
@@ -38,7 +41,20 @@ export async function updateSession(request: NextRequest) {
 
   // Do not put code between createServerClient and getClaims(): it validates
   // the JWT and refreshes it when expired, writing new cookies via setAll.
-  await supabase.auth.getClaims();
+  const { data } = await supabase.auth.getClaims();
+
+  const path = request.nextUrl.pathname;
+  const isProtected = PROTECTED_PREFIXES.some((p) => path === p || path.startsWith(`${p}/`));
+  if (!data?.claims && isProtected) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/login";
+    url.search = "";
+    url.searchParams.set("next", path);
+    const redirect = NextResponse.redirect(url);
+    // Keep any cookie changes (e.g. a cleared expired session).
+    response.cookies.getAll().forEach((cookie) => redirect.cookies.set(cookie));
+    return redirect;
+  }
 
   return response;
 }

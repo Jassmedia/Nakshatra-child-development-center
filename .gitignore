@@ -49,3 +49,5 @@ supabase/.branches
 .idea/
 .vscode/*
 !.vscode/extensions.json
+/test-results/
+/playwright-report/

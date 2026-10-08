@@ -1,6 +1,7 @@
 import "server-only";
 
 import { redirect } from "next/navigation";
+import { cache } from "react";
 
 import { hasRole, isAppRole, ROLE_HOME, type AppRole } from "@/lib/auth/roles";
 import { createClient } from "@/lib/supabase/server";
@@ -21,9 +22,9 @@ export type CurrentUser = {
  * 3. Deactivated users are treated as logged out.
  *
  * Returns null when nobody (valid) is logged in.
- * Login/logout screens and route protection are wired up in Step 2.
+ * Wrapped in React cache(): layout + page + actions share ONE lookup per request.
  */
-export async function getCurrentUser(): Promise<CurrentUser | null> {
+export const getCurrentUser = cache(async function getCurrentUser(): Promise<CurrentUser | null> {
   const supabase = await createClient();
 
   const { data: claimsData, error: claimsError } = await supabase.auth.getClaims();
@@ -44,7 +45,7 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
     fullName: profile.full_name,
     role: profile.role,
   };
-}
+});
 
 /**
  * Server-side guard for pages, Server Actions and Route Handlers.

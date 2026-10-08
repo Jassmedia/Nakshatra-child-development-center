@@ -1,5 +1,6 @@
 import "server-only";
 
+import { fetchAll } from "@/lib/supabase/fetch-all";
 import { createClient } from "@/lib/supabase/server";
 import { todayIST } from "@/lib/utils";
 
@@ -29,11 +30,11 @@ export async function listStaff(filters: { q?: string; status?: string }) {
   const { data, error } = await query;
   if (error) throw new Error("Could not load staff");
 
-  const { data: assignments } = await supabase
-    .from("student_staff_assignments")
-    .select("staff_id, starts_on, ends_on");
+  const assignments = await fetchAll((a, b) =>
+    supabase.from("student_staff_assignments").select("id, staff_id, starts_on, ends_on").order("id").range(a, b),
+  );
   const counts = new Map<string, number>();
-  for (const a of assignments ?? []) {
+  for (const a of assignments) {
     if (isActiveAssignment(a)) counts.set(a.staff_id, (counts.get(a.staff_id) ?? 0) + 1);
   }
   return data.map((s) => ({ ...s, activeStudents: counts.get(s.id) ?? 0 }));

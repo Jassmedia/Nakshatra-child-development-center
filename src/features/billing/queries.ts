@@ -1,5 +1,6 @@
 import "server-only";
 
+import { fetchAll } from "@/lib/supabase/fetch-all";
 import { createClient } from "@/lib/supabase/server";
 import { todayIST } from "@/lib/utils";
 
@@ -72,17 +73,16 @@ export async function billingSummary() {
   const supabase = await createClient();
   const today = todayIST();
   const monthStart = `${today.slice(0, 7)}-01`;
-  const [open, paidThisMonth] = await Promise.all([
-    supabase.from("fees").select("balance, due_date, status").in("status", ["pending", "partially_paid"]),
-    supabase.from("payments").select("amount").eq("voided", false).gte("payment_date", monthStart).lte("payment_date", today),
+  const [rows, paidThisMonth] = await Promise.all([
+    fetchAll((a, b) => supabase.from("fees").select("id, balance, due_date, status").in("status", ["pending", "partially_paid"]).order("id").range(a, b)),
+    fetchAll((a, b) => supabase.from("payments").select("id, amount").eq("voided", false).gte("payment_date", monthStart).lte("payment_date", today).order("id").range(a, b)),
   ]);
-  const rows = open.data ?? [];
   const overdue = rows.filter((f) => f.due_date < today);
   return {
     outstanding: rupees(rows.reduce((s, f) => s + Number(f.balance), 0)),
     openCount: rows.length,
     overdueAmount: rupees(overdue.reduce((s, f) => s + Number(f.balance), 0)),
     overdueCount: overdue.length,
-    collectedThisMonth: rupees((paidThisMonth.data ?? []).reduce((s, p) => s + Number(p.amount), 0)),
+    collectedThisMonth: rupees(paidThisMonth.reduce((s, p) => s + Number(p.amount), 0)),
   };
 }

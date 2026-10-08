@@ -25,6 +25,9 @@ You need Node.js 22 and a Supabase database. Pick one:
 
 **A. Supabase CLI (Windows / macOS / Linux, needs Docker Desktop)**
 
+On Windows, `powershell -ExecutionPolicy Bypass -File .\scripts\setup-windows.ps1` does all of the steps below
+(checks Node/Docker, installs, starts Supabase, writes `.env.local`, seeds, starts the app).
+
 ```bash
 npm install
 npx supabase start                 # local Supabase; applies supabase/migrations

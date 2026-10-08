@@ -58,7 +58,4 @@ export async function seed(db, ids) {
 
   console.log("demo students, parents and assignments created");
 
-  // Later stages append their demo data via this hook.
-  const more = await import("./seed-demo-modules.mjs").catch(() => null);
-  if (more?.seed) await more.seed(db, ids, { aarav, diya, zoya, kabir }, { day, insert });
 }

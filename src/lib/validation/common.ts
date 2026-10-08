@@ -72,3 +72,17 @@ export const optionalEmail = z
   .union([z.literal(""), emailSchema])
   .optional()
   .transform((v) => (v ? v : null));
+
+/** Optional whole number from a form input: "" becomes null. */
+export function optionalInt(min: number, max: number) {
+  return z
+    .union([z.literal(""), z.coerce.number().int(`Enter a whole number`).min(min, `Minimum ${min}`).max(max, `Maximum ${max}`)])
+    .optional()
+    .transform((v) => (v === "" || v === undefined ? null : v));
+}
+
+/** Optional time from <input type="time">: "" becomes null. */
+export const optionalTime = z
+  .union([z.literal(""), z.string().regex(/^\d{2}:\d{2}(:\d{2})?$/, "Enter a time like 09:30")])
+  .optional()
+  .transform((v) => (v ? v : null));

@@ -5,7 +5,65 @@ export type Database = {
   
   "public": {
           Tables: {
-            "audit_log": {
+            "activities": {
+                  Row: {
+                    "category": string | null,"created_at": string,"created_by": string | null,"default_duration_min": number | null,"description": string | null,"id": string,"is_active": boolean,"kind": string,"name": string,"updated_at": string,"updated_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "category"?: string | null,"created_at"?: string,"created_by"?: string | null,"default_duration_min"?: number | null,"description"?: string | null,"id"?: string,"is_active"?: boolean,"kind"?: string,"name": string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "category"?: string | null,"created_at"?: string,"created_by"?: string | null,"default_duration_min"?: number | null,"description"?: string | null,"id"?: string,"is_active"?: boolean,"kind"?: string,"name"?: string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "activities_created_by_fkey"
+      columns: ["created_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "activities_updated_by_fkey"
+      columns: ["updated_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"attendance": {
+                  Row: {
+                    "attendance_date": string,"check_in": string | null,"check_out": string | null,"created_at": string,"created_by": string | null,"id": string,"remarks": string | null,"status": string,"student_id": string,"updated_at": string,"updated_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "attendance_date": string,"check_in"?: string | null,"check_out"?: string | null,"created_at"?: string,"created_by"?: string | null,"id"?: string,"remarks"?: string | null,"status": string,"student_id": string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "attendance_date"?: string,"check_in"?: string | null,"check_out"?: string | null,"created_at"?: string,"created_by"?: string | null,"id"?: string,"remarks"?: string | null,"status"?: string,"student_id"?: string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "attendance_created_by_fkey"
+      columns: ["created_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "attendance_student_id_fkey"
+      columns: ["student_id"]
+isOneToOne: false
+      referencedRelation: "students"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "attendance_updated_by_fkey"
+      columns: ["updated_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"audit_log": {
                   Row: {
                     "action": string,"changed_at": string,"changed_by": string | null,"id": number,"new_data": Json | null,"old_data": Json | null,"record_id": string | null,"table_name": string
                   }
@@ -75,6 +133,44 @@ isOneToOne: true
       foreignKeyName: "staff_details_profile_id_fkey"
       columns: ["profile_id"]
 isOneToOne: true
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"student_activities": {
+                  Row: {
+                    "activity_id": string | null,"category": string | null,"completed_at": string | null,"created_at": string,"created_by": string | null,"duration_min": number | null,"goal": string | null,"id": string,"kind": string,"performance_rating": number | null,"scheduled_date": string,"scheduled_time": string | null,"staff_remarks": string | null,"status": string,"student_id": string,"title": string,"updated_at": string,"updated_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "activity_id"?: string | null,"category"?: string | null,"completed_at"?: string | null,"created_at"?: string,"created_by"?: string | null,"duration_min"?: number | null,"goal"?: string | null,"id"?: string,"kind"?: string,"performance_rating"?: number | null,"scheduled_date": string,"scheduled_time"?: string | null,"staff_remarks"?: string | null,"status"?: string,"student_id": string,"title": string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "activity_id"?: string | null,"category"?: string | null,"completed_at"?: string | null,"created_at"?: string,"created_by"?: string | null,"duration_min"?: number | null,"goal"?: string | null,"id"?: string,"kind"?: string,"performance_rating"?: number | null,"scheduled_date"?: string,"scheduled_time"?: string | null,"staff_remarks"?: string | null,"status"?: string,"student_id"?: string,"title"?: string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "student_activities_activity_id_fkey"
+      columns: ["activity_id"]
+isOneToOne: false
+      referencedRelation: "activities"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "student_activities_created_by_fkey"
+      columns: ["created_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "student_activities_student_id_fkey"
+      columns: ["student_id"]
+isOneToOne: false
+      referencedRelation: "students"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "student_activities_updated_by_fkey"
+      columns: ["updated_by"]
+isOneToOne: false
       referencedRelation: "profiles"
       referencedColumns: ["id"]
     }

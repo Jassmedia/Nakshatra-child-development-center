@@ -57,9 +57,11 @@ async function main() {
   for (const p of PEOPLE) ids[p.key] = await ensureUser(p);
   console.log("users ready:", PEOPLE.map((p) => p.email).join(", "));
 
-  // Later stages extend this file with students, parents, activities, etc.
-  const extra = await import("./seed-demo-data.mjs").catch(() => null);
-  if (extra?.seed) await extra.seed(db, ids);
+  // People and families, then each module's records (each step skips itself if already seeded).
+  const { seed } = await import("./seed-demo-data.mjs");
+  await seed(db, ids);
+  const modules = await import("./seed-demo-modules.mjs");
+  await modules.seed(db, ids);
 
   console.log(`done. password for all demo accounts: ${DEMO_PASSWORD}`);
 }

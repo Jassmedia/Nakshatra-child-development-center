@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, use, useActionState, useEffect, useRef, type ComponentProps, type ReactNode } from "react";
+import { createContext, use, useActionState, useEffect, useId, useRef, type ComponentProps, type ReactNode } from "react";
 import { useFormStatus } from "react-dom";
 
 import { IDLE, type ActionState } from "@/lib/actions";
@@ -9,6 +9,13 @@ import { cn } from "@/lib/utils";
 import { buttonClass } from "./button";
 
 const FormStateContext = createContext<ActionState>(IDLE);
+/** Unique per form, so several forms on one page never share input ids. */
+const FormIdContext = createContext<string>("");
+
+function useControlId(name: string, explicit?: string) {
+  const prefix = use(FormIdContext);
+  return explicit ?? (prefix ? `${prefix}-${name}` : name);
+}
 
 type ServerAction = (state: ActionState, formData: FormData) => Promise<ActionState>;
 
@@ -30,6 +37,7 @@ export function ActionForm({
 }) {
   const [state, formAction] = useActionState(action, IDLE);
   const formRef = useRef<HTMLFormElement>(null);
+  const formId = useId().replace(/:/g, "");
 
   useEffect(() => {
     if (resetOnSuccess && state.status === "success") formRef.current?.reset();
@@ -37,6 +45,7 @@ export function ActionForm({
 
   return (
     <FormStateContext value={state}>
+      <FormIdContext value={formId}>
       <form ref={formRef} action={formAction} className={cn("flex flex-col gap-4", className)} noValidate {...props}>
         {state.status === "error" && state.message ? (
           <p role="alert" className="rounded-lg border border-rose-600/40 bg-rose-50 px-3 py-2 text-sm text-rose-800">
@@ -50,6 +59,7 @@ export function ActionForm({
         ) : null}
         {children}
       </form>
+      </FormIdContext>
     </FormStateContext>
   );
 }
@@ -79,16 +89,17 @@ export function Field({
   className?: string;
 }) {
   const error = useFieldError(name);
+  const id = useControlId(name);
   return (
     <div className={cn("flex flex-col gap-1.5", className)}>
-      <label htmlFor={name} className="text-sm font-bold text-ink-700">
+      <label htmlFor={id} className="text-sm font-bold text-ink-700">
         {label}
         {required ? <span className="text-rose-600"> *</span> : null}
       </label>
       {children}
       {hint && !error ? <p className="text-xs text-ink-400">{hint}</p> : null}
       {error ? (
-        <p id={`${name}-error`} className="text-xs font-bold text-rose-800">
+        <p id={`${id}-error`} className="text-xs font-bold text-rose-800">
           {error}
         </p>
       ) : null}
@@ -98,12 +109,13 @@ export function Field({
 
 export function Input({ name, className, ...props }: ComponentProps<"input"> & { name: string }) {
   const error = useFieldError(name);
+  const id = useControlId(name, props.id);
   return (
     <input
-      id={props.id ?? name}
+      id={id}
       name={name}
       aria-invalid={error ? true : undefined}
-      aria-describedby={error ? `${name}-error` : undefined}
+      aria-describedby={error ? `${id}-error` : undefined}
       className={cn(controlClass, "h-11", className)}
       {...props}
     />
@@ -112,13 +124,14 @@ export function Input({ name, className, ...props }: ComponentProps<"input"> & {
 
 export function Textarea({ name, className, rows = 3, ...props }: ComponentProps<"textarea"> & { name: string }) {
   const error = useFieldError(name);
+  const id = useControlId(name, props.id);
   return (
     <textarea
-      id={props.id ?? name}
+      id={id}
       name={name}
       rows={rows}
       aria-invalid={error ? true : undefined}
-      aria-describedby={error ? `${name}-error` : undefined}
+      aria-describedby={error ? `${id}-error` : undefined}
       className={cn(controlClass, "py-2 leading-6", className)}
       {...props}
     />
@@ -127,12 +140,13 @@ export function Textarea({ name, className, rows = 3, ...props }: ComponentProps
 
 export function Select({ name, className, children, ...props }: ComponentProps<"select"> & { name: string }) {
   const error = useFieldError(name);
+  const id = useControlId(name, props.id);
   return (
     <select
-      id={props.id ?? name}
+      id={id}
       name={name}
       aria-invalid={error ? true : undefined}
-      aria-describedby={error ? `${name}-error` : undefined}
+      aria-describedby={error ? `${id}-error` : undefined}
       className={cn(controlClass, "h-11", className)}
       {...props}
     >

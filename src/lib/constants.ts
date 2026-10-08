@@ -10,3 +10,34 @@ export const STATUS_LABEL: Record<string, string> = {
   on_hold: "On hold",
   discharged: "Discharged",
 };
+
+export const ACTIVITY_KINDS = ["activity", "workout"] as const;
+export const ACTIVITY_STATUSES = ["scheduled", "completed", "partially_completed", "not_completed", "cancelled"] as const;
+export const ACTIVITY_CATEGORIES = [
+  "Speech & language",
+  "Occupational therapy",
+  "Physiotherapy / motor",
+  "Sensory",
+  "Cognitive",
+  "Social & play",
+  "Behaviour",
+  "Self-care",
+  "Academic readiness",
+  "Other",
+] as const;
+export const ATTENDANCE_STATUSES = ["present", "late", "absent", "leave"] as const;
+
+export const ACTIVITY_STATUS_LABEL: Record<string, string> = {
+  scheduled: "Scheduled",
+  completed: "Completed",
+  partially_completed: "Partly done",
+  not_completed: "Not done",
+  cancelled: "Cancelled",
+};
+
+export const ATTENDANCE_LABEL: Record<string, string> = {
+  present: "Present",
+  late: "Late",
+  absent: "Absent",
+  leave: "On leave",
+};

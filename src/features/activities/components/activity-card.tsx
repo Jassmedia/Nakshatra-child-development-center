@@ -17,7 +17,7 @@ type Activity = {
   performance_rating: number | null;
   staff_remarks: string | null;
   completed_at: string | null;
-  updated_by_profile?: { full_name: string } | null;
+  updated_by_name?: string | null;
   student?: { id: string; full_name: string } | null;
 };
 
@@ -44,9 +44,9 @@ export function ActivityCard({ activity: a, canEdit, showStudent }: { activity: 
       {a.staff_remarks ? (
         <blockquote className="mt-2 border-l-2 border-star-500 pl-3 text-[15px] leading-6 whitespace-pre-line text-ink-700">
           {a.staff_remarks}
-          {a.updated_by_profile?.full_name ? (
+          {a.updated_by_name ? (
             <footer className="mt-1 text-xs text-ink-400">
-              {a.updated_by_profile.full_name}
+              {a.updated_by_name}
               {a.completed_at ? `, ${formatDateTime(a.completed_at)}` : ""}
             </footer>
           ) : null}

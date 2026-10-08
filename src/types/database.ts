@@ -291,7 +291,16 @@ isOneToOne: false
             [_ in never]: never
           }
           Functions: {
-            [_ in never]: never
+            "get_staff_names":
+{ Args: Record<PropertyKey, never>; Returns: {
+              "designation": string,"full_name": string,"id": string
+            }[]
+                           },
+"get_student_therapists":
+{ Args: { "p_student_id": string }; Returns: {
+              "assignment_role": string,"designation": string,"full_name": string,"staff_id": string,"starts_on": string
+            }[]
+                           }
           }
           Enums: {
             "app_role": "admin"|"staff"|"parent"

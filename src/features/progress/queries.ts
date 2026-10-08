@@ -1,9 +1,15 @@
 import "server-only";
 
+import { getStaffNames } from "@/features/staff/names";
 import { createClient } from "@/lib/supabase/server";
 
 const COLUMNS =
-  "id, student_id, record_date, area, level, trend, observations, improvements, attention_areas, recommendations, shared_with_parent, created_at, author:profiles!progress_updates_created_by_fkey(full_name)";
+  "id, student_id, record_date, area, level, trend, observations, improvements, attention_areas, recommendations, shared_with_parent, created_at, created_by";
+
+async function withAuthor<T extends { created_by: string | null }>(rows: T[]) {
+  const names = await getStaffNames();
+  return rows.map((r) => ({ ...r, author_name: r.created_by ? (names.get(r.created_by) ?? null) : null }));
+}
 
 export type ProgressUpdate = Awaited<ReturnType<typeof listStudentProgress>>[number];
 
@@ -18,7 +24,7 @@ export async function listStudentProgress(studentId: string, area?: string) {
     .order("created_at", { ascending: false });
   if (area) query = query.eq("area", area);
   const { data } = await query;
-  return data ?? [];
+  return withAuthor(data ?? []);
 }
 
 /** Recent updates across all visible children (admin overview). */
@@ -34,7 +40,7 @@ export async function listRecentProgress(filters: { trend?: string; area?: strin
   if (filters.area) query = query.eq("area", filters.area);
   if (filters.from) query = query.gte("record_date", filters.from);
   const { data } = await query;
-  return data ?? [];
+  return withAuthor(data ?? []);
 }
 
 /** Latest update per area (input must be newest-first). */

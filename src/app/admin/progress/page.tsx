@@ -72,7 +72,7 @@ export default async function AdminProgressPage({ searchParams }: PageProps<"/ad
                   <Td>{r.area}{!r.shared_with_parent ? <span className="ml-2"><Badge tone="warn">Internal</Badge></span> : null}</Td>
                   <Td>{r.level ?? "—"}</Td>
                   <Td><StatusBadge status={r.trend} label={TREND_LABEL[r.trend]} /></Td>
-                  <Td>{r.author?.full_name ?? "—"}</Td>
+                  <Td>{r.author_name ?? "—"}</Td>
                 </tr>
               ))}
             </tbody>

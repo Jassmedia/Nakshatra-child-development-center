@@ -23,7 +23,7 @@ export function ProgressEntry({ update: u, canEdit, showInternalFlag }: { update
           <h3 className="text-[17px] font-bold">{u.area}</h3>
           <p className="text-sm text-ink-400">
             {formatDate(u.record_date)}
-            {u.author?.full_name ? `, by ${u.author.full_name}` : ""}
+            {u.author_name ? `, by ${u.author_name}` : ""}
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2">

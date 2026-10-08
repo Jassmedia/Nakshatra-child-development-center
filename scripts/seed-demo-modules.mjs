@@ -92,4 +92,32 @@ export async function seed(db, ids) {
     await insert(db, "attendance", rows);
     console.log(`demo attendance: ${rows.length} rows`);
   }
+
+  // --- Stage 4: progress history --------------------------------------------------------
+  if (await isEmpty(db, "progress_updates")) {
+    const series = [
+      ["aarav", "Speech & language", ids.speech, [2, 2, 3, 3], ["Uses single words to request.", "Combining two words with prompts.", "Two-word phrases without prompts.", "Starting 3-word phrases at snack time."]],
+      ["aarav", "Sensory processing", ids.speech, [2, 3, 3], ["Avoids messy play.", "Tolerates sand for 2 minutes.", "Joins sensory bin play willingly."]],
+      ["zoya", "Social & emotional", ids.speech, [3, 3, 2], ["Waits for a turn with a visual cue.", "Shares toys with one peer.", "Upset by schedule changes this week."]],
+      ["diya", "Fine motor", ids.ot, [2, 3, 4], ["Palmar grasp on crayons.", "Tripod grasp emerging.", "Threads 10 large beads independently."]],
+      ["kabir", "Gross motor", ids.ot, [1, 2], ["Needs support climbing two steps.", "Climbs steps holding the rail."]],
+    ];
+    const rows = [];
+    for (const [child, area, by, levels, notes] of series) {
+      levels.forEach((level, i) => {
+        const prev = levels[i - 1];
+        const trend = prev === undefined ? "steady" : level > prev ? "improving" : level < prev ? "needs_attention" : "steady";
+        rows.push({
+          student_id: S[child], area, level, trend, record_date: day(-14 * (levels.length - 1 - i) - 1),
+          observations: notes[i],
+          improvements: trend === "improving" ? "Clear gain since the last review." : null,
+          attention_areas: trend === "needs_attention" ? "Transitions between activities; prepare with a visual timetable." : null,
+          recommendations: "Practise for 10 minutes daily at home.",
+          shared_with_parent: true, created_by: by, updated_by: by,
+        });
+      });
+    }
+    await insert(db, "progress_updates", rows);
+    console.log(`demo progress: ${rows.length} updates`);
+  }
 }

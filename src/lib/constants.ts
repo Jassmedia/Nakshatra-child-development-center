@@ -41,3 +41,30 @@ export const ATTENDANCE_LABEL: Record<string, string> = {
   absent: "Absent",
   leave: "On leave",
 };
+
+export const DEVELOPMENT_AREAS = [
+  "Speech & language",
+  "Fine motor",
+  "Gross motor",
+  "Sensory processing",
+  "Cognitive",
+  "Social & emotional",
+  "Behaviour",
+  "Self-care",
+  "Academic readiness",
+  "Overall",
+] as const;
+
+export const TRENDS = ["improving", "steady", "needs_attention"] as const;
+export const TREND_LABEL: Record<string, string> = {
+  improving: "Improving",
+  steady: "Steady",
+  needs_attention: "Needs attention",
+};
+export const LEVEL_LABEL: Record<number, string> = {
+  1: "Emerging",
+  2: "With a lot of support",
+  3: "With some support",
+  4: "Mostly independent",
+  5: "Independent",
+};

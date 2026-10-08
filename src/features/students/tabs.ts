@@ -7,5 +7,6 @@ export function studentTabs(base: string, role: AppRole) {
     { href: base, label: "Profile" },
     { href: `${base}/activities`, label: "Activities" },
     { href: `${base}/attendance`, label: "Attendance" },
+    { href: `${base}/progress`, label: "Progress" },
   ];
 }

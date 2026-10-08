@@ -117,6 +117,38 @@ isOneToOne: true
                   Relationships: [
                     
                   ]
+                },"progress_updates": {
+                  Row: {
+                    "area": string,"attention_areas": string | null,"created_at": string,"created_by": string | null,"id": string,"improvements": string | null,"level": number | null,"observations": string,"recommendations": string | null,"record_date": string,"shared_with_parent": boolean,"student_id": string,"trend": string,"updated_at": string,"updated_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "area": string,"attention_areas"?: string | null,"created_at"?: string,"created_by"?: string | null,"id"?: string,"improvements"?: string | null,"level"?: number | null,"observations": string,"recommendations"?: string | null,"record_date"?: string,"shared_with_parent"?: boolean,"student_id": string,"trend"?: string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "area"?: string,"attention_areas"?: string | null,"created_at"?: string,"created_by"?: string | null,"id"?: string,"improvements"?: string | null,"level"?: number | null,"observations"?: string,"recommendations"?: string | null,"record_date"?: string,"shared_with_parent"?: boolean,"student_id"?: string,"trend"?: string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "progress_updates_created_by_fkey"
+      columns: ["created_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "progress_updates_student_id_fkey"
+      columns: ["student_id"]
+isOneToOne: false
+      referencedRelation: "students"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "progress_updates_updated_by_fkey"
+      columns: ["updated_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    }
+                  ]
                 },"staff_details": {
                   Row: {
                     "created_at": string,"designation": string | null,"joined_on": string | null,"profile_id": string,"qualification": string | null,"specialization": string | null,"updated_at": string

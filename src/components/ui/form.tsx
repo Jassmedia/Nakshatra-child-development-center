@@ -94,7 +94,7 @@ export function Field({
     <div className={cn("flex flex-col gap-1.5", className)}>
       <label htmlFor={id} className="text-sm font-bold text-ink-700">
         {label}
-        {required ? <span className="text-rose-600"> *</span> : null}
+        {required ? <span aria-hidden className="text-rose-600"> *</span> : null}
       </label>
       {children}
       {hint && !error ? <p className="text-xs text-ink-400">{hint}</p> : null}

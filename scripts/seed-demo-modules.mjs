@@ -141,4 +141,25 @@ export async function seed(db, ids) {
     ]);
     console.log(`demo home assignments: ${tasks.length}`);
   }
+
+  // --- Stage 7: fees and payments -------------------------------------------------------
+  if (await isEmpty(db, "fees")) {
+    const month = (offset) => {
+      const d = new Date(); d.setUTCDate(1); d.setUTCMonth(d.getUTCMonth() + offset);
+      return d.toLocaleDateString("en-IN", { month: "long", year: "numeric", timeZone: "UTC" });
+    };
+    const fees = await insert(db, "fees", [
+      { student_id: S.aarav, title: `${month(-1)} therapy fee`, amount: 6000, discount: 0, due_date: day(-25), created_by: ids.admin },
+      { student_id: S.aarav, title: `${month(0)} therapy fee`, amount: 6000, discount: 500, due_date: day(3), created_by: ids.admin },
+      { student_id: S.diya, title: `${month(0)} therapy fee`, amount: 4500, discount: 0, due_date: day(-4), created_by: ids.admin },
+      { student_id: S.zoya, title: `${month(0)} therapy fee`, amount: 7000, discount: 0, due_date: day(0), created_by: ids.admin },
+      { student_id: S.kabir, title: "Initial assessment", amount: 2500, discount: 0, due_date: day(-20), created_by: ids.admin },
+    ]);
+    await insert(db, "payments", [
+      { fee_id: fees[0].id, student_id: S.aarav, amount: 6000, payment_date: day(-27), method: "upi", reference: "UPI-48213", created_by: ids.admin },
+      { fee_id: fees[2].id, student_id: S.diya, amount: 2000, payment_date: day(-6), method: "cash", remarks: "Rest next week", created_by: ids.admin },
+      { fee_id: fees[4].id, student_id: S.kabir, amount: 2500, payment_date: day(-21), method: "bank_transfer", reference: "NEFT 77120", created_by: ids.admin },
+    ]);
+    console.log(`demo billing: ${fees.length} fees`);
+  }
 }

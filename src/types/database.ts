@@ -77,6 +77,38 @@ isOneToOne: false
                   Relationships: [
                     
                   ]
+                },"fees": {
+                  Row: {
+                    "amount": number,"amount_paid": number,"balance": number | null,"cancelled_reason": string | null,"created_at": string,"created_by": string | null,"discount": number,"due_date": string,"fee_number": string,"id": string,"period_end": string | null,"period_start": string | null,"remarks": string | null,"status": string,"student_id": string,"title": string,"updated_at": string,"updated_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "amount": number,"amount_paid"?: number,"balance"?: never,"cancelled_reason"?: string | null,"created_at"?: string,"created_by"?: string | null,"discount"?: number,"due_date": string,"fee_number"?: string,"id"?: string,"period_end"?: string | null,"period_start"?: string | null,"remarks"?: string | null,"status"?: string,"student_id": string,"title": string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "amount"?: number,"amount_paid"?: number,"balance"?: never,"cancelled_reason"?: string | null,"created_at"?: string,"created_by"?: string | null,"discount"?: number,"due_date"?: string,"fee_number"?: string,"id"?: string,"period_end"?: string | null,"period_start"?: string | null,"remarks"?: string | null,"status"?: string,"student_id"?: string,"title"?: string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "fees_created_by_fkey"
+      columns: ["created_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "fees_student_id_fkey"
+      columns: ["student_id"]
+isOneToOne: false
+      referencedRelation: "students"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "fees_updated_by_fkey"
+      columns: ["updated_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    }
+                  ]
                 },"home_assignment_comments": {
                   Row: {
                     "assignment_id": string,"author_id": string | null,"body": string,"created_at": string,"id": string,"student_id": string
@@ -175,6 +207,44 @@ isOneToOne: false
       foreignKeyName: "parents_profile_id_fkey"
       columns: ["profile_id"]
 isOneToOne: true
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"payments": {
+                  Row: {
+                    "amount": number,"created_at": string,"created_by": string | null,"fee_id": string,"id": string,"method": string,"payment_date": string,"receipt_number": string,"reference": string | null,"remarks": string | null,"student_id": string,"updated_at": string,"updated_by": string | null,"void_reason": string | null,"voided": boolean
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "amount": number,"created_at"?: string,"created_by"?: string | null,"fee_id": string,"id"?: string,"method": string,"payment_date"?: string,"receipt_number"?: string,"reference"?: string | null,"remarks"?: string | null,"student_id": string,"updated_at"?: string,"updated_by"?: string | null,"void_reason"?: string | null,"voided"?: boolean
+                  }
+                  Update: {
+                    "amount"?: number,"created_at"?: string,"created_by"?: string | null,"fee_id"?: string,"id"?: string,"method"?: string,"payment_date"?: string,"receipt_number"?: string,"reference"?: string | null,"remarks"?: string | null,"student_id"?: string,"updated_at"?: string,"updated_by"?: string | null,"void_reason"?: string | null,"voided"?: boolean
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "payments_created_by_fkey"
+      columns: ["created_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "payments_fee_id_fkey"
+      columns: ["fee_id"]
+isOneToOne: false
+      referencedRelation: "fees"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "payments_student_id_fkey"
+      columns: ["student_id"]
+isOneToOne: false
+      referencedRelation: "students"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "payments_updated_by_fkey"
+      columns: ["updated_by"]
+isOneToOne: false
       referencedRelation: "profiles"
       referencedColumns: ["id"]
     }

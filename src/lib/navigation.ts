@@ -11,6 +11,7 @@ export const NAV: Record<AppRole, NavItem[]> = {
     { href: "/admin/attendance", label: "Attendance" },
     { href: "/admin/progress", label: "Progress" },
     { href: "/admin/home-tasks", label: "Home tasks" },
+    { href: "/admin/billing", label: "Billing" },
     { href: "/admin/parents", label: "Parents" },
     { href: "/admin/staff", label: "Staff" },
     { href: "/admin/users", label: "User accounts" },

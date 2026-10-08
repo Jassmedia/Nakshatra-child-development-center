@@ -86,3 +86,16 @@ export const optionalTime = z
   .union([z.literal(""), z.string().regex(/^\d{2}:\d{2}(:\d{2})?$/, "Enter a time like 09:30")])
   .optional()
   .transform((v) => (v ? v : null));
+
+/**
+ * Rupee amount from a form, kept as a STRING with up to 2 decimals so it reaches
+ * PostgreSQL numeric exactly (never through a floating-point number).
+ */
+export function moneySchema(label = "Amount", { allowZero = false } = {}) {
+  return z
+    .string()
+    .trim()
+    .transform((v) => v.replace(/[,₹\s]/g, ""))
+    .refine((v) => /^\d{1,10}(\.\d{1,2})?$/.test(v), `${label}: enter rupees, e.g. 2500 or 2500.50`)
+    .refine((v) => allowZero || Number(v) > 0, `${label} must be more than zero`);
+}

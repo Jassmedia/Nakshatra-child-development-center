@@ -5,7 +5,7 @@ import { EmptyState, StatusBadge } from "@/components/ui/layout";
 import { childSnapshot, myChildren } from "@/features/parents/portal";
 import { requireRole } from "@/lib/auth/session";
 import { ATTENDANCE_LABEL, STATUS_LABEL, TREND_LABEL } from "@/lib/constants";
-import { ageFrom, formatDate, todayIST } from "@/lib/utils";
+import { ageFrom, formatDate, formatMoney, todayIST } from "@/lib/utils";
 
 export const metadata: Metadata = { title: "Home" };
 
@@ -45,6 +45,18 @@ async function ChildCard({ child }: { child: Awaited<ReturnType<typeof myChildre
             ) : (
               <Link href={`${base}/activities`} className="font-bold text-ink-600 hover:underline">
                 {s.activitiesDone} of {s.activitiesToday} done
+              </Link>
+            )}
+          </dd>
+        </div>
+        <div className="sm:col-span-2">
+          <dt className="text-xs font-bold text-ink-400">Fees</dt>
+          <dd className="mt-1 text-[15px]">
+            {s.feesDue === 0 ? (
+              <span className="text-ink-400">Nothing due</span>
+            ) : (
+              <Link href={`${base}/fees`} className={s.feesOverdue ? "font-bold text-rose-800 hover:underline" : "font-bold text-ink-600 hover:underline"}>
+                {formatMoney(s.feesDue)} {s.feesOverdue ? "overdue" : `due by ${formatDate(s.nextFeeDue)}`}
               </Link>
             )}
           </dd>

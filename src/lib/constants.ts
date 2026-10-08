@@ -75,3 +75,21 @@ export const ASSIGNMENT_STATUS_LABEL: Record<string, string> = {
   completed: "Completed",
   reviewed: "Reviewed",
 };
+
+export const FEE_STATUSES = ["pending", "partially_paid", "paid", "cancelled"] as const;
+export const FEE_STATUS_LABEL: Record<string, string> = {
+  pending: "Pending",
+  partially_paid: "Partially paid",
+  paid: "Paid",
+  cancelled: "Cancelled",
+  overdue: "Overdue",
+};
+export const PAYMENT_METHODS = ["cash", "upi", "bank_transfer", "card", "cheque", "other"] as const;
+export const PAYMENT_METHOD_LABEL: Record<string, string> = {
+  cash: "Cash",
+  upi: "UPI",
+  bank_transfer: "Bank transfer",
+  card: "Card",
+  cheque: "Cheque",
+  other: "Other",
+};

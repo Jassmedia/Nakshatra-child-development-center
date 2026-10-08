@@ -12,7 +12,7 @@ import type { Database } from "@/types/database";
  * It also does an OPTIMISTIC redirect: visitors without a valid session who open a
  * protected area are sent to /login. The real checks still run on the server.
  */
-const PROTECTED_PREFIXES = ["/admin", "/staff", "/parent", "/account", "/notifications"];
+const PROTECTED_PREFIXES = ["/admin", "/staff", "/parent", "/account", "/notifications", "/receipts"];
 
 export async function updateSession(request: NextRequest) {
   const env = getPublicEnv();

@@ -8,6 +8,7 @@ import type { CurrentUser } from "@/lib/auth/session";
 import { NAV } from "@/lib/navigation";
 
 import { MobileMenu } from "./mobile-menu";
+import { NotificationBell } from "./notification-bell";
 import { NavLinks } from "./nav-links";
 
 function UserBlock({ user }: { user: CurrentUser }) {
@@ -27,7 +28,7 @@ function UserBlock({ user }: { user: CurrentUser }) {
 }
 
 /** Logged-in frame shared by the admin, staff and parent areas. */
-export function AppShell({ user, children, topRight }: { user: CurrentUser; children: ReactNode; topRight?: ReactNode }) {
+export function AppShell({ user, children }: { user: CurrentUser; children: ReactNode }) {
   const items = NAV[user.role];
   const brand = (
     <Link href={ROLE_HOME[user.role]} className="flex items-center gap-2.5">
@@ -54,7 +55,7 @@ export function AppShell({ user, children, topRight }: { user: CurrentUser; chil
       <header className="sticky top-0 z-30 flex h-14 items-center justify-between bg-ink-800 px-3 lg:hidden">
         {brand}
         <div className="flex items-center gap-1">
-          {topRight}
+          <NotificationBell />
           <MobileMenu>
             <nav aria-label="Main">
               <NavLinks items={items} />
@@ -67,9 +68,9 @@ export function AppShell({ user, children, topRight }: { user: CurrentUser; chil
       </header>
 
       <div className="flex min-w-0 flex-1 flex-col">
-        {topRight ? (
-          <div className="hidden h-14 items-center justify-end border-b border-line bg-white px-6 lg:flex">{topRight}</div>
-        ) : null}
+        <div className="hidden h-14 items-center justify-end border-b border-line bg-white px-6 lg:flex">
+          <NotificationBell tone="light" />
+        </div>
         <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-6 sm:px-6 lg:py-8">{children}</main>
       </div>
     </div>

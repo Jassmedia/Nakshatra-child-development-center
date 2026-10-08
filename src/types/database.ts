@@ -31,6 +31,26 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"app_settings": {
+                  Row: {
+                    "id": number,"overdue_repeat_days": number,"reminder_days_before": number,"reminders_enabled": boolean,"updated_at": string,"updated_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "id"?: number,"overdue_repeat_days"?: number,"reminder_days_before"?: number,"reminders_enabled"?: boolean,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "id"?: number,"overdue_repeat_days"?: number,"reminder_days_before"?: number,"reminders_enabled"?: boolean,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "app_settings_updated_by_fkey"
+      columns: ["updated_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    }
+                  ]
                 },"attendance": {
                   Row: {
                     "attendance_date": string,"check_in": string | null,"check_out": string | null,"created_at": string,"created_by": string | null,"id": string,"remarks": string | null,"status": string,"student_id": string,"updated_at": string,"updated_by": string | null
@@ -185,6 +205,32 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"notifications": {
+                  Row: {
+                    "body": string | null,"created_at": string,"id": string,"link": string | null,"read_at": string | null,"recipient_id": string,"student_id": string | null,"title": string,"type": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "body"?: string | null,"created_at"?: string,"id"?: string,"link"?: string | null,"read_at"?: string | null,"recipient_id": string,"student_id"?: string | null,"title": string,"type": string
+                  }
+                  Update: {
+                    "body"?: string | null,"created_at"?: string,"id"?: string,"link"?: string | null,"read_at"?: string | null,"recipient_id"?: string,"student_id"?: string | null,"title"?: string,"type"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "notifications_recipient_id_fkey"
+      columns: ["recipient_id"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "notifications_student_id_fkey"
+      columns: ["student_id"]
+isOneToOne: false
+      referencedRelation: "students"
+      referencedColumns: ["id"]
+    }
+                  ]
                 },"parents": {
                   Row: {
                     "address": string | null,"alternate_phone": string | null,"created_at": string,"created_by": string | null,"email": string | null,"full_name": string,"id": string,"phone": string | null,"profile_id": string | null,"updated_at": string
@@ -208,6 +254,32 @@ isOneToOne: false
       columns: ["profile_id"]
 isOneToOne: true
       referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"payment_reminders": {
+                  Row: {
+                    "created_at": string,"fee_id": string,"id": string,"kind": string,"recipients": number,"sent_on": string,"student_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "created_at"?: string,"fee_id": string,"id"?: string,"kind": string,"recipients"?: number,"sent_on": string,"student_id": string
+                  }
+                  Update: {
+                    "created_at"?: string,"fee_id"?: string,"id"?: string,"kind"?: string,"recipients"?: number,"sent_on"?: string,"student_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "payment_reminders_fee_id_fkey"
+      columns: ["fee_id"]
+isOneToOne: false
+      referencedRelation: "fees"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "payment_reminders_student_id_fkey"
+      columns: ["student_id"]
+isOneToOne: false
+      referencedRelation: "students"
       referencedColumns: ["id"]
     }
                   ]
@@ -449,6 +521,9 @@ isOneToOne: false
 { Args: { "p_student_id": string }; Returns: {
               "assignment_role": string,"designation": string,"full_name": string,"staff_id": string,"starts_on": string
             }[]
+                           },
+"run_payment_reminders":
+{ Args: { "p_today"?: string }; Returns: number
                            }
           }
           Enums: {

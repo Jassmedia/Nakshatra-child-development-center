@@ -22,7 +22,7 @@ export default async function BillingPage({ searchParams }: PageProps<"/admin/bi
   ]);
   return (
     <>
-      <PageHeader title="Billing" description="Fees and payments. Amounts paid and statuses are calculated from the recorded payments." actions={<LinkButton href="/admin/billing/new">Create fee</LinkButton>} />
+      <PageHeader title="Billing" description="Fees and payments. Amounts paid and statuses are calculated from the recorded payments." actions={<><LinkButton href="/admin/billing/reminders" variant="secondary">Reminders</LinkButton><LinkButton href="/admin/billing/new">Create fee</LinkButton></>} />
       <div className="mb-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
         <Stat label="Pending amount" value={formatMoney(summary.outstanding)} hint={`${summary.openCount} open fees`} tone={summary.outstanding ? "warn" : undefined} />
         <Stat label="Overdue" value={formatMoney(summary.overdueAmount)} hint={`${summary.overdueCount} fees past due`} tone={summary.overdueCount ? "bad" : undefined} />
